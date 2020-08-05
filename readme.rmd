@@ -72,11 +72,9 @@ using a sample of 3 plant species from the Stoten publication above.
 
 ```{r message=FALSE, echo=TRUE, warning=FALSE, eval=TRUE}
 
-## Use the first 3 plant species in the Stoten list
-data("plant.spp")
+## Use the bat species
 data("bat.spp")
 analysis_spp <- str_trim(bat.spp)
-analysis_spp <- plant.spp[1:3]
 analysis_spp
 
 ```
@@ -86,7 +84,7 @@ The species list is supplied to a series of functions to calculate enviromnetal 
 suitability. The initial functions download all species records from the Atlas and living Australia
 (https://www.ala.org.au/) and the Global Biodiversity Information Facility (GBIF, https://www.gbif.org/). 
 The species data are downloaded as individual .Rdata files to the specified folders, which must exist first, 
-without returning anything.
+without returning anything. The package functions expect these folders (a typical R project structure), create them if they don't exist
 
 \
 
@@ -117,8 +115,7 @@ for(i in dir_lists) {
 
 Now download GBIF and ALA occurrence data for each species. The downloading functions 
 are separated, because the ALA and GBIF columns are slightly different, but both 
-data sources are needed to properly quantify species ranges. The package functions 
-expect these folders (a typical R project structure), create them if they don't exist
+data sources are needed to properly quantify species ranges.
 
 \
 
