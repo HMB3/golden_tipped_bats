@@ -156,7 +156,7 @@ We can also get some global climate data from the worldclim website using raster
 ## Download global raster for minimum temperature
 ## https://drive.google.com/open?id=1mQHVmYxSMw_cw1iGvfU9M7Pq6Kl6nz-C
 worldclim_climate = raster::stack(
-  file.path('./data/worldclim/aus/current',
+  file.path('./data/worldclim/world/current',
             sprintf('bio_%02d', 1:19)))
 
 worldclim_annual_temp <- worldclim_climate[[1]]
@@ -183,13 +183,14 @@ ALA.LAND = combine_ala_records(species_list      = analysis_spp,
                                keep_cols         = ALA_keep,
                                world_raster      = worldclim_annual_temp)
 
+
 ## Combine GBIF data and filter to records on land taken > 1950
 GBIF.LAND = combine_gbif_records(species_list      = analysis_spp,
                                  records_path      = "./data/GBIF/",
                                  records_extension = "_GBIF_records.RData",
                                  record_type       = "GBIF",
                                  keep_cols         = gbif_keep,
-                                 world_raster      =  worldclim_annual_temp)
+                                 world_raster      = worldclim_annual_temp)
 
 ``` 
 
