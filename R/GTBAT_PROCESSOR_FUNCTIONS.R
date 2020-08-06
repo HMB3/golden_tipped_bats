@@ -666,20 +666,31 @@ combine_records_extract = function(ala_df,
     ## Create points: the 'over' function seems to need geographic coordinates for this data...
     COMBO.POINTS   = GBIF.ALA.84.1KM[c("lon", "lat")]
 
+    ## Bioclim variables
+    ## Extract raster data
+    message('Extracting raster values for ', length(species_list), ' species in the set ', "'", save_run, "'")
+    message(projection(COMBO.POINTS));message(projection(world_raster))
+    dim(COMBO.POINTS);dim(GBIF.ALA.84.1KM)
+
+    ## Extract the raster values
+    COMBO.RASTER <- raster::extract(world_raster, COMBO.POINTS) %>%
+      cbind(as.data.frame(GBIF.ALA.84.1KM), .)
+
   } else {
     message('dont thin the records out' )
-    COMBO.POINTS = GBIF.ALA.84
+    COMBO.POINTS = GBIF.ALA.84[c("lon", "lat")]
+
+    ## Bioclim variables
+    ## Extract raster data
+    message('Extracting raster values for ', length(species_list), ' species in the set ', "'", save_run, "'")
+    message(projection(COMBO.POINTS));message(projection(world_raster))
+    dim(COMBO.POINTS);dim(GBIF.ALA.84)
+
+    ## Extract the raster values
+    COMBO.RASTER <- raster::extract(world_raster, COMBO.POINTS) %>%
+      cbind(as.data.frame(GBIF.ALA.84), .)
+
   }
-
-  ## Bioclim variables
-  ## Extract raster data
-  message('Extracting raster values for ', length(species_list), ' species in the set ', "'", save_run, "'")
-  message(projection(COMBO.POINTS));message(projection(world_raster))
-  dim(COMBO.POINTS);dim(GBIF.ALA.84.1KM)
-
-  ## Extract the raster values
-  COMBO.RASTER <- raster::extract(world_raster, COMBO.POINTS) %>%
-    cbind(as.data.frame(GBIF.ALA.84.1KM), .)
 
   ## Group rename the columns
   ## This relies on the bioclim order, it must be the same

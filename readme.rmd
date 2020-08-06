@@ -239,7 +239,7 @@ COMBO.RASTER.CONVERT = combine_records_extract(ala_df          = ALA.LAND,
                                                biocl_vars      = bioclim_variables,
                                                env_vars        = env_variables,
                                                worldclim_grids = TRUE,
-                                               save_data       = FALSE,
+                                               save_data       = TRUE,
                                                save_run        = "TEST_BATS")
 
 ``` 
