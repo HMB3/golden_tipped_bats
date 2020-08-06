@@ -725,7 +725,9 @@ combine_records_extract = function(ala_df,
   if(save_data == TRUE) {
 
     ## save .rds file for the next session
+    ## Must also return the results!
     saveRDS(COMBO.RASTER.CONVERT, paste0(data_path, 'COMBO_RASTER_CONVERT_',  save_run, '.rds'))
+    return(COMBO.RASTER.CONVERT)
 
   } else {
     return(COMBO.RASTER.CONVERT)
@@ -1778,7 +1780,6 @@ prepare_sdm_table = function(coord_df,
   COMBO.RASTER.ALL  <- coord_df %>%
     dplyr::select(one_of(sdm_table_vars))
 
-
   ## Create a spatial points object, and change to a projected system to calculate distance more accurately
   ## This is the mollweide projection used for the SDMs
   coordinates(COMBO.RASTER.ALL)    <- ~lon+lat
@@ -1790,12 +1791,7 @@ prepare_sdm_table = function(coord_df,
 
 
   ## TRY CLEANING FILTERED DATA FOR SPATIAL OUTLIERS
-  ## The cc_outl function has been tweaked and sped up.
-
-  ## Create a unique identifier for spatial cleaning.
-  ## This is used for automated cleaing of the records, and also saving shapefiles
-  ## But this will not be run for all species linearly.
-  ## So, it probably needs to be a combination of species and number
+  ## The cc_outl function has been tweaked and sped up
   SDM.DATA.ALL$SPOUT.OBS <- 1:nrow(SDM.DATA.ALL)
   SDM.DATA.ALL$SPOUT.OBS <- paste0(SDM.DATA.ALL$SPOUT.OBS, "_SPOUT_", SDM.DATA.ALL$searchTaxon)
   SDM.DATA.ALL$SPOUT.OBS <- gsub(" ",     "_",  SDM.DATA.ALL$SPOUT.OBS, perl = TRUE)
@@ -1880,6 +1876,7 @@ prepare_sdm_table = function(coord_df,
   ## Join data :: Best to use the 'OBS' column here
   message('Is the order or records identical before joining?',
           identical(nrow(SDM.COORDS), nrow(SPAT.OUT)))
+
   message('Is the order or records identical after joining?',
           identical(SDM.DATA.ALL$searchTaxon, SPAT.OUT$searchTaxon))
   length(unique(SPAT.OUT$searchTaxon))

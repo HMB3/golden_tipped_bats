@@ -74,7 +74,7 @@ using a sample of 3 plant species from the Stoten publication above.
 
 ## Use the bat species
 data("bat.spp")
-analysis_spp <- str_trim(bat.spp)
+analysis_spp <- str_trim(bat.spp)[1:2]
 analysis_spp
 
 ```
@@ -240,7 +240,8 @@ COMBO.RASTER.CONVERT = combine_records_extract(ala_df          = ALA.LAND,
                                                env_vars        = env_variables,
                                                worldclim_grids = TRUE,
                                                save_data       = TRUE,
-                                               save_run        = "TEST_BATS")
+                                               save_run        = "TEST_BATS",
+                                               data_path       =  './output/results/')
 
 ``` 
 
@@ -370,29 +371,7 @@ SDM.SPAT.OCC.BG = prepare_sdm_table(coord_df        = COORD.CLEAN,
 The next process is to run species distribution models using global records of each species.
 In order to sample species records thoroughly, we use a rasterized version of the 1975 
 Koppen raster, and another template raster of the same extent (global), resolution (1km*1km) 
-and projection (Mollweide) as the analysis data. This step takes ages...
-
-\
-
-```{r message=FALSE, echo=TRUE, warning=FALSE, eval=FALSE}
-
-## Use gdal to create a template raster in the mollweide projection, using one of the bioclim layers
-template_raster_1km_mol <- gdalwarp("./data/wc2-5/bio1.bil",
-                                    tempfile(fileext = '.bil'),
-                                    t_srs = sp_epsg54009,
-                                    output_Raster = TRUE,
-                                    tr = c(1000, 1000),
-                                    r = "near", 
-                                    dstnodata = '-9999')
-
-## Should be 1km*1km, values of 0 for ocean and 1 for land 
-template_raster_1km_mol[template_raster_1km_mol > 0] <- 1
-template_raster_1km_mol[template_raster_1km_mol < 0] <- 1
-xres(template_raster_1km_mol)
-
-``` 
-
-\
+and projection (Mollweide) as the analysis data. 
 
 A pre-prepared template raster in the Mollweide projection is found on google drive :
 https://drive.google.com/open?id=1mQHVmYxSMw_cw1iGvfU9M7Pq6Kl6nz-C
@@ -423,7 +402,7 @@ minimum number of predictors remains.
 
 ```{r message=FALSE, echo=TRUE, warning=FALSE, eval=FALSE}
 
-run_sdm_analysis(species_list            = analysis_spp[66],
+run_sdm_analysis(species_list            = analysis_spp,
                  maxent_dir              = 'output/maxent/full_models',     
                  bs_dir                  = 'output/maxent/back_sel_models',
                  sdm_df                  = SDM.SPAT.OCC.BG,
